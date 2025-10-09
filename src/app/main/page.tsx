@@ -1,4 +1,5 @@
 'use client';
+import { FlipCard } from "@/components/ui/FlipCards";
 import { useRouter } from "next/navigation";
 
 const diviniteFa = { name: "Fa", slug: "fa", image: "/Fâ.png" };
@@ -24,71 +25,55 @@ export default function MainPage() {
   const handleClick = (slug: string) => {
     router.push(`/main/${slug}`);
   };
-
-  const renderCards = (items: { name: string; slug: string; image: string }[]) =>
+  
+  const renderCards = (items: { name: string; slug: string; image: string; description?: string }[]) =>
     items.map((div) => (
-      <div
+      <FlipCard
         key={div.slug}
-        onClick={() => handleClick(div.slug)}
-        style={{
-          cursor: "pointer",
-          width: "240px",
-          borderRadius: "20px",
-          backgroundColor: "rgba(35, 35, 35, 0.85)",
-          boxShadow: "0 0 20px rgba(0,0,0,0.6)",
-          backdropFilter: "blur(8px)",
-          overflow: "hidden",
-          transition: "all 0.3s ease",
-          transform: "translateY(0px)",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)";
-          (e.currentTarget as HTMLDivElement).style.boxShadow =
-            "0 0 25px rgba(240, 225, 48, 0.6)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLDivElement).style.transform = "translateY(0px)";
-          (e.currentTarget as HTMLDivElement).style.boxShadow =
-            "0 0 20px rgba(0,0,0,0.6)";
-        }}
-      >
-        {/* Image */}
-        <div style={{ width: "100%", height: "240px", overflow: "hidden" }}>
-          <img
-            src={div.image}
-            alt={div.name}
+        name={div.name}
+        image={div.image}
+        description={div.description || `Plus d’infos sur ${div.name} ici…`}
+        childrenFront={
+          <div
             style={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
-              display: "block",
-              transition: "transform 0.4s ease",
+              borderRadius: "20px",
+              backgroundColor: "rgba(35, 35, 35, 0.85)",
+              boxShadow: "0 0 20px rgba(0,0,0,0.6)",
+              backdropFilter: "blur(8px)",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLImageElement).style.transform = "scale(1.08)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLImageElement).style.transform = "scale(1)";
-            }}
-          />
-        </div>
-
-        {/* Nom */}
-        <div
-          style={{
-            padding: "1rem",
-            color: "#ffe84b",
-            fontWeight: "bold",
-            fontSize: "1.3rem",
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-            background: "rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          {div.name}
-        </div>
-      </div>
+          >
+            <div style={{ width: "100%", height: "240px", overflow: "hidden" }}>
+              <img
+                src={div.image}
+                alt={div.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </div>
+            <div
+              style={{
+                padding: "1rem",
+                color: "#ffe84b",
+                fontWeight: "bold",
+                fontSize: "1.3rem",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                background: "rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              {div.name}
+            </div>
+          </div>
+        }
+      />
     ));
+  
+  
 
   return (
     <div
@@ -125,7 +110,6 @@ export default function MainPage() {
           }}
         />
       </div>
-
       {/* Contenu principal */}
       <div
         style={{
@@ -134,16 +118,40 @@ export default function MainPage() {
           textAlign: "center",
         }}
       >
-        <h1
+       <div
+        className="split-text-container"
+        style={{
+          fontSize: "clamp(2rem, 6vw, 6rem)",
+          textTransform: "uppercase",
+          color: "#fffbe6",
+          textShadow: "0 0 20px rgba(240,225,48,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          gap: "4%", // petit espace constant entre les mots
+          overflow: "hidden",
+        }}
+      >
+        <span
+          className="text-part left"
           style={{
-            fontSize: "clamp(2.5rem, 6vw, 5rem)",
-            marginBottom: "1rem",
-            color: "#fffbe6",
-            textShadow: "0 0 20px rgba(240,225,48,0.5)",
+            display: "inline-block",
+            transform: "translateX(-200%)",
+            animation: "slide-in-left 1.5s ease-out forwards",
           }}
         >
-          Vodoun Béninois
-        </h1>
+          VODOU
+        </span>
+        <span
+          className="text-part right"
+          style={{
+            display: "inline-block",
+            transform: "translateX(200%)",
+            animation: "slide-in-right 1.5s ease-out forwards",
+          }}
+        >
+          BÉNINOIS
+        </span>
+      </div>
 
         <p
           style={{

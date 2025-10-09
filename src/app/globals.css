@@ -31,3 +31,61 @@ body {
   color: var(--foreground);
   font-family: Arial, "AfricanFont", Helvetica, sans-serif;
 }
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+/* Arrière-plans thématiques */
+.intro-section {
+  background: url("/background_intro.jpg") center/cover no-repeat;
+  position: relative;
+}
+.intro-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.main-section {
+  background: url("/background_main.png") center/cover no-repeat;
+  position: relative;
+}
+.main-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.symbols-section {
+  background: radial-gradient(circle at center, #1a0d00, #000);
+}
+
+.end-section {
+  background: radial-gradient(circle, #100600, #000);
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
