@@ -101,35 +101,27 @@ export default function MainPage() {
         color: "#f0e130",
       }}
     >
-      {/* Background */}
+      {/* Background fixe */}
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
+          width: "100vw",
+          height: "100vh",
           zIndex: -1,
+          backgroundImage: 'url("/background_main.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          filter: "brightness(0.7)",
         }}
       >
-        <img
-          src="/background_main.png"
-          alt="Background Vaudou"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            filter: "brightness(0.7)",
-          }}
-        />
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.45)",
+            backgroundColor: "rgba(0,0,0,0.45)",
           }}
         />
       </div>
