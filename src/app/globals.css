@@ -26,12 +26,6 @@ body {
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, "AfricanFont", Helvetica, sans-serif;
-}
-
 .section {
   display: flex;
   justify-content: center;
