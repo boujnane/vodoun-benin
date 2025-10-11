@@ -29,7 +29,7 @@ export default function MainPage() {
   }, [countdown]);
 
   return (
-    <div className="w-screen h-screen relative overflow-hidden flex flex-col items-center justify-center">
+    <div className="w-screen h-screen relative overflow-hidden flex flex-col">
       <VantaBackground />
       <ModernNavbar />
 
@@ -42,7 +42,8 @@ export default function MainPage() {
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 2, rotate: -45 }}
             transition={{ duration: 0.9, ease: "easeInOut" }}
-            className="absolute text-[12rem] md:text-[18rem] font-AfricanFont text-center 
+            className="absolute top-1/3 w-full text-center
+                       text-[12rem] md:text-[18rem] font-AfricanFont 
                        text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 via-amber-100 to-orange-700
                        drop-shadow-[0_0_20px_rgba(255,255,150,0.5)]
                        select-none"
@@ -60,7 +61,11 @@ export default function MainPage() {
       </AnimatePresence>
 
       {/* Texte d’introduction après le compte à rebours */}
-      {showIntro && <IntroText lines={vaudouIntroLines} interval={5000} />}
+      {showIntro && (
+        <div className="absolute inset-0 overflow-y-auto px-4 py-8 flex flex-col items-center">
+          <IntroText lines={vaudouIntroLines} interval={5000} />
+        </div>
+      )}
     </div>
   );
 }
