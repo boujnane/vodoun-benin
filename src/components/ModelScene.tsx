@@ -18,14 +18,13 @@ interface ModelSceneProps {
   models: Model[];
   lightsOn?: boolean;
   backgroundImage?: string;
-  applyWood?: boolean; // seulement pour les masques
+  applyWood?: boolean;
 }
 
 function SceneContent({
   models,
   lightsOn,
   backgroundImage,
-  applyWood = false,
 }: ModelSceneProps) {
   const lightRefs = {
     front: useRef<THREE.PointLight>(null),
@@ -34,59 +33,40 @@ function SceneContent({
     right: useRef<THREE.PointLight>(null),
   };
 
-  const woodTexture = useTexture('/textures/wood_texture.png');
   const [bgTexture, setBgTexture] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
     if (backgroundImage) {
-      new THREE.TextureLoader().load(backgroundImage, (texture) => setBgTexture(texture));
+      new THREE.TextureLoader().load(backgroundImage, (texture) => {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1, 1);
+        setBgTexture(texture);
+      });
     }
   }, [backgroundImage]);
 
-  woodTexture.wrapS = woodTexture.wrapT = THREE.RepeatWrapping;
-  woodTexture.repeat.set(1, 1);
-
   return (
     <>
-      {/* Background */}
       {bgTexture ? <primitive attach="background" object={bgTexture} /> : <color attach="background" args={['#0e0e0f']} />}
       <fog attach="fog" args={['#0e0e0f', 6, 20]} />
 
-      {/* Dynamic models */}
-      {models.map((model, i) => (
+      {models.map((model) => (
         <VodouMask
-          key={i}
+          key={model.url + JSON.stringify(model.position)} // ✅ clé stable et unique
           {...model}
           float
-          woodTexture={applyWood ? woodTexture : undefined} // seulement pour masques
         />
       ))}
 
-      {/* Lights */}
       {lightsOn && (
         <>
-          {/* Lumière frontale globale pour tous les modèles */}
-          <directionalLight
-            position={[0, 30, 10]}
-            intensity={57}
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-          />
-
-          {/* Lumières d’ambiance supplémentaires */}
-          <pointLight ref={lightRefs.front} position={[0, 2, 5]} intensity={140} color="#ffFFFF" />
-          <pointLight ref={lightRefs.back} position={[0, 2, -6]} intensity={70} distance={10} color="#ffb86c" />
-          <pointLight ref={lightRefs.left} position={[-5, 1.5, -0.5]} intensity={27} distance={10} color="#ffb86c" />
-          <pointLight ref={lightRefs.right} position={[5, 2, 0.5]} intensity={35} distance={26} color="#ffb86c" />
+          <directionalLight position={[0, 30, -150]} intensity={30} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
+          <directionalLight position={[0, 30, 30]} intensity={30} castShadow shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
         </>
       )}
 
-      {/* Controls & Environment */}
       <Environment preset="night" />
       <OrbitControls autoRotate autoRotateSpeed={0.3} enableZoom={false} minPolarAngle={0} maxPolarAngle={Math.PI / 2.3} />
-
-      {/* Postprocessing */}
       <Postpro />
     </>
   );
@@ -98,8 +78,6 @@ export function ModelScene({ models, lightsOn = true, backgroundImage, applyWood
       <Canvas gl={{ antialias: true }} shadows camera={{ position: [0, 0, 16], fov: 35 }}>
         <SceneContent models={models} lightsOn={lightsOn} backgroundImage={backgroundImage} applyWood={applyWood} />
       </Canvas>
-
-      {/* Overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

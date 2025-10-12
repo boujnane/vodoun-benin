@@ -7,10 +7,12 @@ import { ModelScene } from "@/components/ModelScene";
 // === Groupes de modèles disponibles ===
 const MODEL_GROUPS = {
   masks: [
-    { url: "/african_mask.glb", rotation: [-0.3, 0, 0] as [number, number, number], scale: 0.25, position: [0, -1, 3.5] as [number, number, number] },
-    { url: "/african_mask2.glb", rotation: [0, 2, 0] as [number, number, number], scale: 0.2, position: [0, -1, -2.5] as [number, number, number] },
-    { url: "/african_mask3.glb", rotation: [0, 85, 0] as [number, number, number], scale: 0.08, position: [-3, -1, -0.5] as [number, number, number] },
-    { url: "/african_mask4.glb", rotation: [0, 38, 0] as [number, number, number], scale: 0.09, position: [3, -1, 0] as [number, number, number] },
+    { 
+      url: "/mask_meshy.glb", 
+      rotation: [0, 3, 0] as [number, number, number], 
+      scale: 2, 
+      position: [0, 0.5, 0] as [number, number, number] 
+    },
   ],
   zangbetos: [
     { url: "/Zangbéto.glb", scale: 2, position: [0, 1, 0] as [number, number, number] }
@@ -43,10 +45,10 @@ export default function MaskGalleryPage() {
       {/* === 3D Scene === */}
       <div className="absolute inset-0">
         <ModelScene
+          key={currentGroup}
           models={MODEL_GROUPS[currentGroup]}
           lightsOn={lightOn}
           backgroundImage="bg_pattern_vodou.png"
-          applyWood={currentGroup === "masks"}
         />
       </div>
 
@@ -103,7 +105,6 @@ export default function MaskGalleryPage() {
           </svg>
         )}
       </button>
-
     </div>
   );
 }
