@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const menuItems = [
   { label: 'Accueil', href: '/' },
   { label: 'Divinités', href: '/divinites' },
-  { label: 'Masques', href: '/masks' },
+  { label: 'Objets', href: '/objets' },
   { label: 'Rituels', href: '/rituals' },
   { label: 'Histoire', href: '/history' },
   { label: 'Contact', href: '/contact' },
