@@ -8,7 +8,7 @@ const menuItems = [
   { label: 'Accueil', href: '/' },
   { label: 'Divinités', href: '/divinites' },
   { label: 'Objets', href: '/objets' },
-  { label: 'Rituels', href: '/rituals' },
+  // { label: 'Rituels', href: '/rituals' },
   { label: 'Histoire', href: '/history' },
   { label: 'Contact', href: '/contact' },
 ];
