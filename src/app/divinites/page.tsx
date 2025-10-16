@@ -2,6 +2,7 @@
 import { FlipCard } from "@/components/ui/FlipCards";
 import { ModernNavbar } from "@/components/ui/ModernNavbar";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const diviniteFa = { name: "Fa", slug: "fa", image: "/Fâ.png" };
 
@@ -26,7 +27,7 @@ export default function MainPage() {
   const handleClick = (slug: string) => {
     router.push(`/main/${slug}`);
   };
-  
+
   const renderCards = (items: { name: string; slug: string; image: string; description?: string }[]) =>
     items.map((div) => (
       <FlipCard
@@ -49,11 +50,12 @@ export default function MainPage() {
               justifyContent: "space-between",
             }}
           >
-            <div style={{ width: "100%", height: "240px", overflow: "hidden" }}>
-              <img
+            <div style={{ width: "100%", height: "240px", position: "relative" }}>
+              <Image
                 src={div.image}
                 alt={div.name}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                fill
+                style={{ objectFit: "cover", borderRadius: "20px" }}
               />
             </div>
             <div
@@ -73,8 +75,6 @@ export default function MainPage() {
         }
       />
     ));
-  
-  
 
   return (
     <div
@@ -112,62 +112,9 @@ export default function MainPage() {
           }}
         />
       </div>
+
       {/* Contenu principal */}
-      <div
-        style={{
-          position: "relative",
-          padding: "5rem 2rem 8rem",
-          textAlign: "center",
-        }}
-      >
-       <div
-        className="split-text-container"
-        style={{
-          fontSize: "clamp(2rem, 6vw, 6rem)",
-          textTransform: "uppercase",
-          color: "#fffbe6",
-          textShadow: "0 0 20px rgba(240,225,48,0.5)",
-          display: "flex",
-          justifyContent: "center",
-          gap: "4%", // petit espace constant entre les mots
-          overflow: "hidden",
-        }}
-      >
-        <span
-          className="text-part left"
-          style={{
-            display: "inline-block",
-            transform: "translateX(-200%)",
-            animation: "slide-in-left 1.5s ease-out forwards",
-          }}
-        >
-          VODOU
-        </span>
-        <span
-          className="text-part right"
-          style={{
-            display: "inline-block",
-            transform: "translateX(200%)",
-            animation: "slide-in-right 1.5s ease-out forwards",
-          }}
-        >
-          BÉNINOIS
-        </span>
-      </div>
-
-        <p
-          style={{
-            fontSize: "1.3rem",
-            marginBottom: "4rem",
-            maxWidth: "700px",
-            marginInline: "auto",
-            color: "#f8e98d",
-          }}
-        >
-          Découvrez les divinités, symboles et esprits qui composent la richesse du
-          panthéon vaudou béninois.
-        </p>
-
+      <div style={{ position: "relative", padding: "5rem 2rem 8rem", textAlign: "center" }}>
         {/* --- FA --- */}
         <div style={{ marginBottom: "5rem" }}>
           <h2
@@ -204,15 +151,12 @@ export default function MainPage() {
                 "0 0 35px rgba(240,225,48,0.6)";
             }}
           >
-            <div style={{ width: "100%", height: "300px", overflow: "hidden" }}>
-              <img
+            <div style={{ width: "100%", height: "300px", position: "relative" }}>
+              <Image
                 src={diviniteFa.image}
                 alt="Fa"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                fill
+                style={{ objectFit: "cover" }}
               />
             </div>
             <div

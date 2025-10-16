@@ -8,7 +8,7 @@ interface IntroTextProps {
   interval?: number; // temps entre chaque phrase
 }
 
-export default function IntroText({ lines, interval = 2000 }: IntroTextProps) {
+export default function IntroText({ lines, interval = 700 }: IntroTextProps) {
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
 
   useEffect(() => {

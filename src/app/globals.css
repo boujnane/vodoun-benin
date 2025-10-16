@@ -83,3 +83,16 @@ body {
     transform: translateX(0);
   }
 }
+
+canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  transform: translateZ(0);
+  will-change: transform;
+  pointer-events: none; /* évite les conflits tactiles sur iOS */
+  contain: strict; /* évite les reflows globaux */
+}
+

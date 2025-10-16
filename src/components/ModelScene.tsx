@@ -1,8 +1,8 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, useTexture } from '@react-three/drei';
-import { useRef, useState, useEffect } from 'react';
+import { OrbitControls, Environment } from '@react-three/drei';
+import { useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { VodouMask } from './VodouMask';
 import { Postpro } from './Postpro';
@@ -26,12 +26,6 @@ function SceneContent({
   lightsOn,
   backgroundImage,
 }: ModelSceneProps) {
-  const lightRefs = {
-    front: useRef<THREE.PointLight>(null),
-    back: useRef<THREE.PointLight>(null),
-    left: useRef<THREE.PointLight>(null),
-    right: useRef<THREE.PointLight>(null),
-  };
 
   const [bgTexture, setBgTexture] = useState<THREE.Texture | null>(null);
 

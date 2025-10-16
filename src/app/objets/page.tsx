@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { ModelScene } from "@/components/ModelScene";
 
 // === Groupes de modèles disponibles ===
@@ -74,7 +75,14 @@ export default function MaskGalleryPage() {
                 : "bg-white/10 hover:bg-white/15"
             }`}
           >
-            <img src={cat.thumbnail} alt={cat.label} className="w-16 h-16 object-cover rounded-md" />
+            <div className="relative w-16 h-16 rounded-md overflow-hidden">
+              <Image
+                src={cat.thumbnail}
+                alt={cat.label}
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
             <span className="mt-1 text-xs uppercase tracking-widest text-white/80">{cat.label}</span>
           </button>
         ))}

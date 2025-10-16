@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import Image from "next/image";
 
 interface CardProps {
   name: string;
@@ -9,17 +10,10 @@ interface CardProps {
 }
 
 export function FlipCard({ name, image, description, childrenFront }: CardProps) {
-  const [flipped, setFlipped] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const handleClick = () => {
-    if (!expanded) {
-      setExpanded(true);
-      setFlipped(true);
-    } else {
-      setExpanded(false);
-      setFlipped(false);
-    }
+    setExpanded((prev) => !prev);
   };
 
   return (
@@ -31,13 +25,8 @@ export function FlipCard({ name, image, description, childrenFront }: CardProps)
         position: expanded ? "fixed" : "relative",
         top: expanded ? "50%" : undefined,
         left: expanded ? "50%" : undefined,
-        transform: expanded
-          ? "translate(-50%, -50%)"
-          : flipped
-          ? "rotateY(180deg) scale(1.05)"
-          : "rotateY(0deg) scale(1)",
+        transform: expanded ? "translate(-50%, -50%) scale(1)" : "scale(1)",
         zIndex: expanded ? 9999 : 1,
-        perspective: "1000px",
         cursor: "pointer",
         margin: expanded ? 0 : "1rem",
         borderRadius: "20px",
@@ -45,6 +34,7 @@ export function FlipCard({ name, image, description, childrenFront }: CardProps)
         overflow: "hidden",
         backgroundColor: expanded ? "#232323" : undefined,
         boxShadow: expanded ? "0 0 40px rgba(0,0,0,0.8)" : undefined,
+        perspective: "1000px",
       }}
     >
       <div
@@ -56,19 +46,21 @@ export function FlipCard({ name, image, description, childrenFront }: CardProps)
         }}
       >
         {/* Face avant */}
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            backfaceVisibility: "hidden",
-            borderRadius: "20px",
-            opacity: expanded ? 0 : 1,
-            overflow: "hidden",
-          }}
-        >
-          {childrenFront}
-        </div>
+        {!expanded && (
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              backfaceVisibility: "hidden",
+              borderRadius: "20px",
+              overflow: "hidden",
+              transition: "opacity 0.3s ease",
+            }}
+          >
+            {childrenFront}
+          </div>
+        )}
 
         {/* Face arrière / modale */}
         {expanded && (
@@ -86,14 +78,18 @@ export function FlipCard({ name, image, description, childrenFront }: CardProps)
               alignItems: "center",
               padding: "2rem",
               textAlign: "center",
+              transform: "rotateY(0deg)", // garde tout droit
+              opacity: 1,
+              transition: "opacity 0.3s ease",
             }}
           >
-            {/* Image en haut */}
-            <div style={{ width: "200px", height: "200px", marginBottom: "1rem", overflow: "hidden", borderRadius: "15px" }}>
-              <img
+            {/* Image */}
+            <div style={{ width: "200px", height: "200px", marginBottom: "1rem", overflow: "hidden", borderRadius: "15px", position: "relative" }}>
+              <Image
                 src={image}
                 alt={name}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                fill
+                style={{ objectFit: "cover", borderRadius: "15px" }}
               />
             </div>
 

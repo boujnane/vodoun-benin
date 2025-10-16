@@ -21,50 +21,69 @@ export default function MainPage() {
 
   useEffect(() => {
     if (countdown > 1) {
-      const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
+      const timer = setTimeout(() => setCountdown(prev => prev - 1), 1000);
       return () => clearTimeout(timer);
     } else {
-      setTimeout(() => setShowIntro(true), 800);
+      const showTimer = setTimeout(() => setShowIntro(true), 800);
+      return () => clearTimeout(showTimer);
     }
   }, [countdown]);
 
   return (
     <div className="w-screen h-screen relative overflow-hidden flex flex-col">
-      <VantaBackground />
+      {/* ✅ Optimisation iOS : Canvas GPU isolé */}
+      <div className="fixed inset-0 -z-10">
+        <VantaBackground />
+      </div>
+
       <ModernNavbar />
 
-      {/* Compte à rebours stylisé */}
+      {/* Compte à rebours fluide */}
       <AnimatePresence>
         {!showIntro && countdown >= 1 && (
           <motion.div
             key={countdown}
-            initial={{ opacity: 0, scale: 0.3, rotate: 45 }}
+            initial={{ opacity: 0, scale: 0.7, rotate: 25 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 2, rotate: -45 }}
-            transition={{ duration: 0.9, ease: "easeInOut" }}
-            className="absolute top-1/3 w-full text-center
-                       text-[12rem] md:text-[18rem] font-AfricanFont 
-                       text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 via-amber-100 to-orange-700
-                       drop-shadow-[0_0_20px_rgba(255,255,150,0.5)]
-                       select-none"
+            exit={{ opacity: 0, scale: 1.5, rotate: -15 }}
+            transition={{
+              duration: 0.9,
+              ease: "easeInOut",
+              type: "tween",
+            }}
+            className="absolute top-1/3 w-full text-center select-none"
             style={{
-              textShadow: `
-                0 0 25px rgba(255, 230, 150, 0.4),
-                0 0 50px rgba(255, 200, 100, 0.2)
-              `,
-              letterSpacing: "0.05em",
+              willChange: "transform, opacity",
             }}
           >
-            {countdown}
+            <span
+              className="text-[9rem] md:text-[14rem] font-AfricanFont text-transparent 
+                         bg-clip-text bg-gradient-to-b from-yellow-300 via-amber-100 to-orange-600 
+                         drop-shadow-none inline-block"
+              style={{
+                filter: "blur(0.4px)",
+                textShadow: "0 0 15px rgba(255, 230, 150, 0.4)",
+                letterSpacing: "0.05em",
+                WebkitFontSmoothing: "antialiased",
+                transform: "translateZ(0)", // ✅ évite le repaint sur iOS
+              }}
+            >
+              {countdown}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Texte d’introduction après le compte à rebours */}
+      {/* Texte d’introduction */}
       {showIntro && (
-        <div className="absolute inset-0 overflow-y-auto px-4 py-8 flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2 }}
+          className="absolute inset-0 overflow-y-auto px-4 py-8 flex flex-col items-center"
+        >
           <IntroText lines={vaudouIntroLines} interval={5000} />
-        </div>
+        </motion.div>
       )}
     </div>
   );

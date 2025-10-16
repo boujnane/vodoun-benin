@@ -7,18 +7,26 @@ export default function KaleidoscopeEffect() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let w = (canvas.width = window.innerWidth);
-    let h = (canvas.height = window.innerHeight);
+    // Détection mobile et ajustement du nombre de "tranches"
+    const isMobile = window.innerWidth < 800;
+    const slices = isMobile ? 10 : 15;
+    const mirror = true;
+
+    // Gestion du ratio pour affichage net sur mobile
+    const DPR = window.devicePixelRatio || 1;
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    canvas.width = w * DPR;
+    canvas.height = h * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
     let w2 = w / 2;
     let h2 = h / 2;
     const { PI, sin, cos } = Math;
     const PI2 = PI * 2;
-    const slices = 15;
-    const mirror = true;
 
     const offset = { x: 50, y: 10 };
     let img: HTMLImageElement | null = null;
@@ -26,17 +34,17 @@ export default function KaleidoscopeEffect() {
 
     function setup() {
       img = new Image();
-      img.src = "https://cdn.midjourney.com/892f003f-3516-4d5a-936c-20dadc35936a/0_0.png";
+      img.crossOrigin = 'anonymous';
+      img.src = 'https://cdn.midjourney.com/892f003f-3516-4d5a-936c-20dadc35936a/0_0.png';
       img.onload = () => {
         if (!ctx) return;
         pattern = ctx.createPattern(img!, 'repeat');
-        loop();
+        requestAnimationFrame(loop);
       };
     }
 
     function loop() {
       if (!ctx) return;
-
       ctx.clearRect(0, 0, w, h);
 
       const radius = w2 + h2;
@@ -45,7 +53,7 @@ export default function KaleidoscopeEffect() {
       const y = [-1, radius, radius * cos(deltaAngle), radius * cos(deltaAngle / 2)];
 
       for (let i = 0; i < slices; i++) {
-        // main slice
+        // tranche principale
         ctx.save();
         ctx.translate(w2, h2);
         ctx.rotate(i * deltaAngle);
@@ -61,7 +69,7 @@ export default function KaleidoscopeEffect() {
         ctx.fill();
         ctx.restore();
 
-        // mirrored slice
+        // tranche miroir
         if (mirror) {
           ctx.save();
           ctx.translate(w2, h2);
@@ -81,7 +89,7 @@ export default function KaleidoscopeEffect() {
         }
       }
 
-      // sécurité sur img.width / img.height
+      // ✅ même vitesse qu’avant
       const imgW = img?.width ?? 100;
       const imgH = img?.height ?? 100;
       offset.x = (offset.x + 0.75) % imgW;
@@ -91,11 +99,14 @@ export default function KaleidoscopeEffect() {
     }
 
     function handleResize() {
-      if (!canvas) return;
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
+      if (!canvas || !ctx) return; // ✅ vérifie qu'ils existent
+      w = window.innerWidth;
+      h = window.innerHeight;
       w2 = w / 2;
       h2 = h / 2;
+      canvas.width = w * DPR;
+      canvas.height = h * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
 
     function handleMouseMove(e: MouseEvent) {
@@ -111,14 +122,16 @@ export default function KaleidoscopeEffect() {
     }
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
     canvas.addEventListener('click', handleClick);
 
     setup();
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (!isMobile) window.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('click', handleClick);
     };
   }, []);
@@ -133,6 +146,7 @@ export default function KaleidoscopeEffect() {
         width: '100vw',
         height: '100vh',
         margin: 0,
+        touchAction: 'none',
       }}
     />
   );
